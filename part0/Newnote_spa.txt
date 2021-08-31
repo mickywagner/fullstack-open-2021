@@ -1,0 +1,19 @@
+title 0.6: New note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+note over browser:
+
+browser runs redrawNotes() so the 
+
+document updates with the new note
+
+end note over
+
+note over server:
+
+request payload includes json
+
+data with content and timestamp
+
+end note over

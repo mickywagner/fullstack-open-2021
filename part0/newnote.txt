@@ -1,0 +1,81 @@
+title 0.4: new note
+
+ 
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+
+server->browser: HTML-code (notes)
+
+browser->server: HTTP GET main.css
+
+server->browser: main.css
+
+browser->server: HTTP GET main.js
+
+server->browser: main.js
+
+ 
+
+note over browser:
+
+browser starts executing js-code
+
+that requests JSON data from server
+
+end note over
+
+ 
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+
+ 
+
+note over browser:
+
+Form Data is sent on the body of the POST
+
+request to be handled by the server;
+
+the server adds the content of req.body.note
+
+and a date to the notes array
+
+end note over
+
+ 
+
+note over server:
+
+server redirects to location in
+
+response header (exampleapp/notes)
+
+and a new GET request is initiated
+
+end note over
+
+ 
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+
+server->browser: HTML-code (notes)
+
+browser->server: HTTP GET main.css
+
+server->browser: main.css
+
+browser->server: HTTP GET main.js
+
+server->browser: main.js
+
+ 
+
+note over browser:
+
+browser starts executing js-code
+
+that requests JSON data from server
+
+which now includes the new note
+
+end note over
