@@ -1,5 +1,11 @@
 import React from 'react';
 
+const StatisticsLine = ({ text, value }) => {
+    return (
+        <div>{text}: {value}</div>
+    )
+}
+
 const Statistics = ({ good, neutral, bad }) => {
     const total = good + bad + neutral
     const percentGood = good / total * 100
@@ -15,13 +21,12 @@ const Statistics = ({ good, neutral, bad }) => {
     return (
         <>
             <h2>Statistics</h2>
-            <ul>
-                <li>Good: {good}</li>
-                <li>Neutral: {neutral}</li>
-                <li>Bad: {bad}</li>
-                <li>All: {total}</li>
-                <li>Postive: {percentGood}%</li>
-            </ul>
+            <StatisticsLine text="Good" value={good} />
+            <StatisticsLine text="Neutral" value={neutral} />
+            <StatisticsLine text="Bad" value={bad} />
+            <StatisticsLine text="All" value={total} />
+            <StatisticsLine text="Positive" value={percentGood} />
+
         </>
     )
 }
