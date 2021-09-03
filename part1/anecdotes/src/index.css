@@ -1,1 +1,39 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+}
+h1, h2 {
+    margin-bottom: 10px;
+}
 
+p {
+    border: 10px double blue;
+    border-bottom-color: green;
+    border-top-color: red;
+    padding: 50px;
+    font-size: 2rem;
+    font-style: italic;
+    max-width: 500px;
+}
+
+span {
+    font-size: 1rem;
+    display: block;
+    text-align: right;
+}
+button {
+    margin: 5px;
+    padding: 5px 15px;
+    font-size: 1.5rem;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.5);
+}
+
+button:hover,
+button:focus {
+    background: yellow;
+    cursor: pointer;
+}
