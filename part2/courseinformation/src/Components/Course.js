@@ -1,14 +1,14 @@
-import React from 'react';
-import Content from './Content';
-import Header from './Header'
+import React from "react";
+import Content from "./Content";
+import Header from "./Header";
 
 const Course = ({ course }) => {
-    return(
-        <>
-            <Header name={course.name} />
-            <Content parts={course.parts}/>
-        </>
-    )
-}
+  return (
+    <>
+      <Header name={course.name} />
+      <Content parts={course.parts} />
+    </>
+  );
+};
 
 export default Course;
