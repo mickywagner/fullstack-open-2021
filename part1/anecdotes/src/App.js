@@ -15,9 +15,9 @@ const App = () => {
 
   const [selected, setSelected] = useState(0);
   const [points, setPoints] = useState(Array(7).fill(0));
-  const [mostVotes, setMostVotes] = useState(0);
+  const [mostVotesIndex, setMostVotes] = useState(0);
 
-  const total = points.reduce((a,b) => a + b);
+  const total = points.reduce((a, b) => a + b);
 
   const getNextAnecdote = () => {
     const getRandomNumber = () => Math.floor(Math.random() * anecdotes.length);
@@ -30,27 +30,23 @@ const App = () => {
         break;
       }
     }
-    checkVotes(points)
+    checkVotes(points);
   };
 
   const addVote = () => {
     let copy = [...points];
     copy[selected] += 1;
     setPoints(copy);
-    checkVotes(copy)
+    checkVotes(copy);
   };
 
   const checkVotes = (array) => {
-    let highestPoints = points[mostVotes];
-    let index = mostVotes;
+    const newHighestPoints = array.find((p) => p > points[mostVotesIndex]);
 
-    for (let i = 0; i < array.length; i++) {
-      if (array[i] > highestPoints) {
-        highestPoints = array[i];
-        index = i;
-      }
+    if (newHighestPoints > -1) {
+      const newIndex = array.indexOf(newHighestPoints);
+      setMostVotes(newIndex);
     }
-    setMostVotes(index);
   };
 
   return (
@@ -64,14 +60,15 @@ const App = () => {
         <Button onClick={addVote} text="Vote" />
         <Button onClick={getNextAnecdote} text="Next Anecdote" />
       </div>
-      {total < 1 ? <p>No votes have been cast</p> : 
+      {total < 1 ? (
+        <p>No votes have been cast</p>
+      ) : (
         <Anecdote
           title="Anecdote with the Most Votes"
-          text={anecdotes[mostVotes]}
-          votes={points[mostVotes]}
+          text={anecdotes[mostVotesIndex]}
+          votes={points[mostVotesIndex]}
         />
-      }
-      
+      )}
     </div>
   );
 };
