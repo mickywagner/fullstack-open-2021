@@ -6,8 +6,19 @@ const App = () => {
     ])
     const [ newName, setNewName ] = useState('')
 
+
+    const checkDuplicateEntry = (name) => {
+      return persons.findIndex(person => person.name === name) 
+    }
     const addNewName = (e) => {
       e.preventDefault()
+
+      if (checkDuplicateEntry(newName) > -1) {
+        alert(`${newName} is already added to the phonebook`)
+        setNewName('')
+        return;
+      }
+    
       let newPerson = { name: newName}
       setPersons(persons.concat(newPerson))
       setNewName('')
