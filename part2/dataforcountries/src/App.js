@@ -6,27 +6,34 @@ import Country from "./components/Country";
 function App() {
   const [countries, setCountries] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [countryToShow, setCountryToShow] = useState([]);
 
   useEffect(() => {
     axios.get("https://restcountries.eu/rest/v2/all").then((response) => {
       const countryData = response.data;
-
       setCountries(countryData);
     });
   }, []);
 
-  let filteredCountries = countries.filter((country) =>
-    country.name.toLowerCase().includes(searchTerm)
-  );
+  const doSearch = (e) => {
+    setSearchTerm(e.target.value);
+    let countryArray = countries.filter((country) =>
+      country.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setCountryToShow(countryArray);
+  };
 
   let displayNames = () => {
-    if (filteredCountries.length == 1) {
-      return <Country country={filteredCountries[0]} />;
-    } else if (filteredCountries.length > 10) {
+    if (countryToShow.length === 1) {
+      return <Country country={countryToShow[0]} />;
+    } else if (countryToShow.length > 10) {
       return <p>Too many matches, specify another filter</p>;
     } else {
-      return filteredCountries.map((country) => (
-        <div key={country.numericCode}>{country.name}</div>
+      return countryToShow.map((country) => (
+        <div key={country.numericCode}>
+          {country.name}{" "}
+          <button onClick={() => setCountryToShow([country])}>Show</button>
+        </div>
       ));
     }
   };
@@ -35,13 +42,9 @@ function App() {
     <div className="App">
       <form>
         <label htmlFor="search">find countries: </label>
-        <input
-          id="search"
-          onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
-          value={searchTerm}
-        />
+        <input id="search" onChange={doSearch} value={searchTerm} />
       </form>
-      {displayNames()}
+      {countries.length > 0 ? displayNames() : "loading data..."}
     </div>
   );
 }
