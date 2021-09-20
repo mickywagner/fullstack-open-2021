@@ -1,17 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+
 import Persons from "./components/Persons";
 import Form from "./components/Form";
 import Filter from "./components/Filter";
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: "040-1234567" },
-  ]);
+  const [persons, setPersons] = useState([]);
   const [filter, setFilter] = useState("");
 
   let filteredList = persons.filter((person) =>
     person.name.toLowerCase().includes(filter.toLowerCase())
   );
+
+  useEffect(() => {
+    axios.get("http://localhost:3001/persons").then((response) => {
+      const personData = response.data;
+      setPersons(personData);
+    });
+  }, []);
 
   return (
     <div>
@@ -21,12 +28,11 @@ const App = () => {
 
       <h2>Add new number</h2>
 
-      <Form persons={persons} setPersons={setPersons}/>
+      <Form persons={persons} setPersons={setPersons} />
 
       <h2>Numbers</h2>
 
       <Persons persons={filteredList} />
-
     </div>
   );
 };
