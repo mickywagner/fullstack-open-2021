@@ -16,6 +16,7 @@ function App() {
   }, []);
 
   const doSearch = (e) => {
+    e.preventDefault()
     setSearchTerm(e.target.value);
     let countryArray = countries.filter((country) =>
       country.name.toLowerCase().includes(searchTerm.toLowerCase())
