@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import contactService from "./services/contacts";
 
 import Persons from "./components/Persons";
 import Form from "./components/Form";
@@ -14,9 +14,8 @@ const App = () => {
   );
 
   useEffect(() => {
-    axios.get("http://localhost:3001/persons").then((response) => {
-      const personData = response.data;
-      setPersons(personData);
+    contactService.getAll().then((initialContacts) => {
+      setPersons(initialContacts);
     });
   }, []);
 

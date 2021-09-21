@@ -34,6 +34,21 @@
       "name": "Legolas Thrandulion",
       "number": "99-99-696969",
       "id": 7
+    },
+    {
+      "name": "Frodo Baggins",
+      "number": "89-12-15142",
+      "id": 8
+    },
+    {
+      "name": "Samwise Gamgee",
+      "number": "89-12-42341",
+      "id": 9
+    },
+    {
+      "name": "Mitch Scheffler",
+      "number": "02-312-123412",
+      "id": 10
     }
   ]
 }
