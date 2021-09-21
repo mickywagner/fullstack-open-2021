@@ -15,6 +15,11 @@ const create = (newContact) => {
 const remove = (id) => {
     return axios.delete(`${baseURL}/${id}`);
 };
+
+const update = (id, updatedContact) => {
+    const request = axios.put(`${baseURL}/${id}`, updatedContact)
+    return request.then(response => response.data)
+}
  
 /* eslint import/no-anonymous-default-export: [2, {"allowObject": true}] */
-export default { getAll, create, remove };
+export default { getAll, create, remove, update };

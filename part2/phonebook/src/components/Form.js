@@ -6,14 +6,22 @@ const Form = ({ persons, setPersons }) => {
   const [newNumber, setNewNumber] = useState("");
 
   const checkDuplicateEntry = (name) => {
-    return persons.findIndex((person) => person.name === name);
+    return persons.findIndex((person) => person.name.toLowerCase() === name.toLowerCase());
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (checkDuplicateEntry(newName) > -1) {
-      alert(`${newName} is already added to the phonebook`);
+      const confirm = window.confirm(`"${newName}" is already in the phonebook, replace the old number with a new one?`);
+      const contact = persons.find(p => p.name.toLowerCase() === newName.toLowerCase())
+
+      if (confirm) {
+        contactService
+          .update(contact.id, {...contact, number: newNumber})
+          .then(updatedInfo => setPersons(persons.map(p => p.id !== contact.id ? p : updatedInfo))) 
+      }
+
     } else {
       let newPerson = { name: newName, number: newNumber };
       contactService
