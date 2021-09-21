@@ -22,33 +22,13 @@
     },
     {
       "name": "Michaela Wagner",
-      "number": "1241242341",
+      "number": "09123412",
       "id": 5
     },
     {
-      "name": "Gimli Son of Gloin",
-      "number": "84-43-34534",
+      "name": "Harry Potter",
+      "number": "1234124",
       "id": 6
-    },
-    {
-      "name": "Legolas Thrandulion",
-      "number": "99-99-696969",
-      "id": 7
-    },
-    {
-      "name": "Frodo Baggins",
-      "number": "89-12-15142",
-      "id": 8
-    },
-    {
-      "name": "Samwise Gamgee",
-      "number": "89-12-42341",
-      "id": 9
-    },
-    {
-      "name": "Mitch Scheffler",
-      "number": "02-312-123412",
-      "id": 10
     }
   ]
 }

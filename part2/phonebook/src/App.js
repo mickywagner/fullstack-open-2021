@@ -7,11 +7,7 @@ import Filter from "./components/Filter";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
-  const [filter, setFilter] = useState("");
-
-  let filteredList = persons.filter((person) =>
-    person.name.toLowerCase().includes(filter.toLowerCase())
-  );
+  const [filteredList, setFilteredList] = useState([]);
 
   useEffect(() => {
     contactService.getAll().then((initialContacts) => {
@@ -19,11 +15,39 @@ const App = () => {
     });
   }, []);
 
+  useEffect(() => {
+    setFilteredList(persons);
+  }, [persons]);
+
+  const deleteContact = (id) => {
+    const contact = persons.find((p) => p.id === id);
+    const confirmation = window.confirm(
+      `Are you sure you want to delete ${contact.name} from the phonebook?`
+    );
+
+    if (confirmation) {
+      contactService
+        .remove(id)
+        .then(setPersons(persons.filter((p) => p.id !== id)))
+        .catch((error) => {
+          alert("Unable to delete::", error);
+        });
+    }
+  };
+
+  const searchFilter = (value) => {
+    setFilteredList(
+      persons.filter((person) =>
+        person.name.toLowerCase().includes(value.toLowerCase())
+      )
+    );
+  };
+
   return (
     <div>
       <h2>Phonebook</h2>
 
-      <Filter filter={filter} setFilter={setFilter} />
+      <Filter searchFilter={searchFilter} />
 
       <h2>Add new number</h2>
 
@@ -31,7 +55,7 @@ const App = () => {
 
       <h2>Numbers</h2>
 
-      <Persons persons={filteredList} />
+      <Persons persons={filteredList} deleteContact={deleteContact} />
     </div>
   );
 };

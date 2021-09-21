@@ -1,12 +1,12 @@
 import React from "react";
-import { nanoid } from "nanoid";
 
-const Persons = ({ persons }) => {
+const Persons = ({ persons, deleteContact }) => {
   let phonebookEntries = persons.map((person) => (
-    <div key={nanoid()}>
-      {person.name} {person.number}
-    </div>
-  ));
+      <div key={person.id}>
+        {person.name} {person.number} {" "}
+        <button onClick={() => deleteContact(person.id)}>Delete</button>
+      </div>
+    ));
 
   return <>{phonebookEntries}</>;
 };
