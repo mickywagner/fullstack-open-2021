@@ -21,7 +21,7 @@
     {
       "content": "POST is used to add data to REST API",
       "date": "2021-09-21T15:52:31.819Z",
-      "important": false,
+      "important": true,
       "id": 4
     },
     {
@@ -33,7 +33,7 @@
     {
       "content": "Adding a new note",
       "date": "2021-09-21T16:37:09.599Z",
-      "important": false,
+      "important": true,
       "id": 6
     },
     {
@@ -41,6 +41,12 @@
       "date": "2021-09-21T17:31:10.578Z",
       "important": true,
       "id": 7
+    },
+    {
+      "content": "I am new",
+      "date": "2021-09-28T19:54:15.657Z",
+      "important": false,
+      "id": 8
     }
   ]
 }
