@@ -6,8 +6,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   padding: 20px;
-  background: #FCF6B1;
-  color: #2D1E2F;
 }
 
 code {
@@ -15,6 +13,4 @@ code {
     monospace;
 }
 
-h1 {
-  color: green;
-}
+

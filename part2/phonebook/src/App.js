@@ -4,10 +4,12 @@ import contactService from "./services/contacts";
 import Persons from "./components/Persons";
 import Form from "./components/Form";
 import Filter from "./components/Filter";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
+  const [message, setMessage] = useState(null)
 
   useEffect(() => {
     contactService.getAll().then((initialContacts) => {
@@ -47,11 +49,13 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
 
+      <Notification message={message} />
+
       <Filter searchFilter={searchFilter} />
 
       <h2>Add new number</h2>
 
-      <Form persons={persons} setPersons={setPersons} />
+      <Form persons={persons} setPersons={setPersons} setMessage={setMessage}/>
 
       <h2>Numbers</h2>
 

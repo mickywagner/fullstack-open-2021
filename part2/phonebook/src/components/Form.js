@@ -1,32 +1,49 @@
 import React, { useState } from "react";
 import contactService from "../services/contacts";
 
-const Form = ({ persons, setPersons }) => {
+const Form = ({ persons, setPersons, setMessage }) => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
 
   const checkDuplicateEntry = (name) => {
-    return persons.findIndex((person) => person.name.toLowerCase() === name.toLowerCase());
+    return persons.findIndex(
+      (person) => person.name.toLowerCase() === name.toLowerCase()
+    );
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (checkDuplicateEntry(newName) > -1) {
-      const confirm = window.confirm(`"${newName}" is already in the phonebook, replace the old number with a new one?`);
-      const contact = persons.find(p => p.name.toLowerCase() === newName.toLowerCase())
+      const confirm = window.confirm(
+        `"${newName}" is already in the phonebook, replace the old number with a new one?`
+      );
+      const contact = persons.find(
+        (p) => p.name.toLowerCase() === newName.toLowerCase()
+      );
 
       if (confirm) {
         contactService
-          .update(contact.id, {...contact, number: newNumber})
-          .then(updatedInfo => setPersons(persons.map(p => p.id !== contact.id ? p : updatedInfo))) 
+          .update(contact.id, { ...contact, number: newNumber })
+          .then((updatedInfo) => {
+            setPersons(
+              persons.map((p) => (p.id !== contact.id ? p : updatedInfo))
+            );
+            setMessage(`${contact.name}'s number was updated to ${newNumber}`);
+            setTimeout(() => {
+              setMessage(null);
+            }, 5000);
+          });
       }
-
     } else {
       let newPerson = { name: newName, number: newNumber };
-      contactService
-        .create(newPerson)
-        .then((newContact) => setPersons(persons.concat(newContact)));
+      contactService.create(newPerson).then((newContact) => {
+        setPersons(persons.concat(newContact));
+        setMessage(`Added ${newName}`);
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
+      });
     }
 
     setNewName("");
