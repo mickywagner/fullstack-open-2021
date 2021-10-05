@@ -9,7 +9,8 @@ import Notification from "./components/Notification";
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
-  const [message, setMessage] = useState(null)
+  const [message, setMessage] = useState(null);
+  const [notificationType, setNotificationType] = useState("success");
 
   useEffect(() => {
     contactService.getAll().then((initialContacts) => {
@@ -49,13 +50,13 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
 
-      <Notification message={message} />
+      <Notification message={message} type={notificationType}/>
 
       <Filter searchFilter={searchFilter} />
 
       <h2>Add new number</h2>
 
-      <Form persons={persons} setPersons={setPersons} setMessage={setMessage}/>
+      <Form persons={persons} setPersons={setPersons} setMessage={setMessage} setNotificationType={setNotificationType}/>
 
       <h2>Numbers</h2>
 

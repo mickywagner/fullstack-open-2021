@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import contactService from "../services/contacts";
 
-const Form = ({ persons, setPersons, setMessage }) => {
+const Form = ({ persons, setPersons, setMessage, setNotificationType }) => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
 
@@ -33,7 +33,11 @@ const Form = ({ persons, setPersons, setMessage }) => {
             setTimeout(() => {
               setMessage(null);
             }, 5000);
-          });
+          })
+          .catch(error => {
+            setNotificationType("error");
+            setMessage(`Information for ${newName} has already been removed from server.`);
+          })
       }
     } else {
       let newPerson = { name: newName, number: newNumber };
