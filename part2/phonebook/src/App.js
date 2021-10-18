@@ -61,6 +61,10 @@ const App = () => {
       <h2>Numbers</h2>
 
       <Persons persons={filteredList} deleteContact={deleteContact} />
+
+      <footer>
+       <a href="/info">About this project</a>
+      </footer>
     </div>
   );
 };
