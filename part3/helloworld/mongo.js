@@ -38,5 +38,3 @@ Note.find({ important: true }).then(result => {
     })
     mongoose.connection.close()
 })
-
-// mrp00pyBUTTH0LE
