@@ -1,0 +1,24 @@
+# GET all notes, expected result: 200, returns all notes
+GET http://localhost:3001/api/notes
+
+###################################
+
+# Get a specific note, expected result: 200, return one note
+GET http://localhost:3001/api/notes/616df1409512c7c1cc8111a0
+
+
+###################################
+
+# Get non-existent, expected result: 404 Not Found
+GET http://localhost:3001/api/notes/699df1409512c7c1cc8111a0
+
+
+###################################
+
+#Get malformed id, expected result: 404 Not Found { error: 'malformed id' }
+GET http://localhost:3001/api/notes/invalidid
+
+
+#################
+GET http://localhost:3001/api/notes/616df68f2c452e10271f3d86
+
