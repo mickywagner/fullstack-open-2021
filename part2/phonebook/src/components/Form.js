@@ -37,17 +37,30 @@ const Form = ({ persons, setPersons, setMessage, setNotificationType }) => {
           .catch(error => {
             setNotificationType("error");
             setMessage(`Information for ${newName} has already been removed from server.`);
+            setTimeout(() => {
+              setMessage(null);
+            }, 5000);
           })
       }
     } else {
       let newPerson = { name: newName, number: newNumber };
-      contactService.create(newPerson).then((newContact) => {
-        setPersons(persons.concat(newContact));
-        setMessage(`Added ${newName}`);
-        setTimeout(() => {
-          setMessage(null);
-        }, 5000);
-      });
+      contactService
+        .create(newPerson)
+        .then((newContact) => {
+          setPersons(persons.concat(newContact));
+          setMessage(`Added ${newName}`);
+          setTimeout(() => {
+              setMessage(null);
+          }, 5000);
+        })
+        .catch(error => {
+          setNotificationType("error");
+          const errorMessage = error.response.data.error;
+          setMessage(errorMessage);
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
+        });
     }
 
     setNewName("");

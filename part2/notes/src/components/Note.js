@@ -1,4 +1,5 @@
 import React from "react";
+import { Icon } from 'semantic-ui-react'
 
 const Note = ({ note, toggleImportance }) => {
   let label = note.important ? "Make not important" : "Make important";
@@ -8,7 +9,11 @@ const Note = ({ note, toggleImportance }) => {
   return (
     <>
       <li>
-        {note.content} <button style={btnStyle} onClick={toggleImportance}>{label}</button>
+        {note.content} 
+        <span> 
+          <button style={btnStyle} onClick={toggleImportance}>{label}</button>
+          <button><Icon name='trash' /></button> 
+        </span>
       </li>
     </>
   );

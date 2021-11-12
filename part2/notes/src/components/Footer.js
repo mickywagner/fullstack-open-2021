@@ -2,18 +2,15 @@ import React from "react";
 
 const Footer = () => {
     const footerStyle = {
-        position: 'absolute',
-        display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
-        padding: '5px',
-        left: 0,
-        bottom: 0,
         backgroundColor: 'black',
         color: 'white',
-        fontStyle: 'italic',
+        display: 'flex',
         fontSize: 16,
-        width: '100%'
+        fontStyle: 'italic',
+        justifyContent: 'center',
+        margin: '20px -20px -20px -20px',
+        padding: '5px',
     }
 
     return (
