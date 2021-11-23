@@ -4,27 +4,28 @@ const Note = require('../models/note')
 
 // GET ROUTES
 
-notesRouter.get('/', (request, response) => {
-  Note.find({}).then((notes) => {
-    response.json(notes)
-  })
+notesRouter.get('/', async (request, response) => {
+  const notes = await Note.find({})
+  response.json(notes)
 })
 
-notesRouter.get('/:id', (request, response, next) => {
-  Note.findById(request.params.id)
-    .then((note) => {
-      if (note) {
-        response.json(note)
-      } else {
-        response.status(404).end()
-      }
-    })
-    .catch((error) => next(error))
+notesRouter.get('/:id', async (request, response, next) => {
+  try {
+    const note = Note.findById(request.params.id)
+
+    if (note) {
+      response.json(note)
+    } else {
+      response.status(404).end()
+    }
+  } catch (error) {
+    next(error)
+  }
 })
 
 // POST ROUTES
 
-notesRouter.post('/', (request, response, next) => {
+notesRouter.post('/', async (request, response, next) => {
   const body = request.body
 
   const note = new Note({
@@ -33,11 +34,8 @@ notesRouter.post('/', (request, response, next) => {
     date: new Date(),
   })
 
-  note.save()
-    .then((savedNote) => {
-      response.json(savedNote)
-    })
-    .catch(error => next(error))
+  const savedNote = await note.save()
+  response.json(savedNote)
 })
 
 // DELETE ROUTES
