@@ -9,7 +9,7 @@ notesRouter.get('/', async (request, response) => {
   response.json(notes)
 })
 
-notesRouter.get('/:id', async (request, response, next) => {
+notesRouter.get('/:id', async (request, response) => {
   const note = await Note.findById(request.params.id)
   if (note) {
     response.json(note.toJSON())
@@ -20,7 +20,7 @@ notesRouter.get('/:id', async (request, response, next) => {
 
 // POST ROUTES
 
-notesRouter.post('/', async (request, response, next) => {
+notesRouter.post('/', async (request, response) => {
   const body = request.body
 
   const note = new Note({
@@ -35,14 +35,14 @@ notesRouter.post('/', async (request, response, next) => {
 
 // DELETE ROUTES
 
-notesRouter.delete('/:id', async (request, response, next) => {
+notesRouter.delete('/:id', async (request, response) => {
   await Note.findByIdAndRemove(request.params.id)
   response.status(204).end()
 })
 
 // PUT ROUTES
 
-notesRouter.put('/:id', async (request, response, next) => {
+notesRouter.put('/:id', async (request, response) => {
   const body = request.body
 
   const note = {
