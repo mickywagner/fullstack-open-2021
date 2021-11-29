@@ -26,6 +26,11 @@ const errorHandler = (error, request, response, next) => {
       error: 'invalid token'
     })
   }
+  if (error.name === 'TokenExpiredError') {
+    return response.status(401).json({
+      error: 'token expired'
+    })
+  }
 
   next(error)
 }

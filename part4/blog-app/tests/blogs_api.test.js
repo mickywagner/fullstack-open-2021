@@ -1,17 +1,25 @@
+const { response } = require('express')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
+const { resource } = require('../app')
 const app = require('../app')
 const Blog = require('../models/blogs')
+const User = require('../models/user')
 const helper = require('./test_helper')
 const api = supertest(app)
+
+beforeAll(async () => {
+    await User.deleteMany({})
+    await User.insertMany(helper.initialUsers)
+})
 
 beforeEach(async () => {
     await Blog.deleteMany({})
     await Blog.insertMany(helper.initialBlogs)
 })
 
-describe('Viewing notes with a few blogs in db', () => {
-    test('notes are returned as json', async () => {
+describe('Viewing blogs with a few blogs in db', () => {
+    test('blogs are returned as json', async () => {
         await api
             .get('/api/blogs')
             .expect(200)
@@ -33,7 +41,17 @@ describe('Viewing notes with a few blogs in db', () => {
 })
 
 describe('Creating a new blog', () => {
-    test('is successful with valid data', async () => {
+    let token = null
+
+    beforeAll(async () => {
+        const body =  { username: "rootUser", password: "test12345" }
+
+        const response = await api.post('/api/login').send(body)
+        
+        token = response.body.token
+    })
+
+    test('is successful with valid data and token', async () => {
         const newBlog = {
             title: "TDD harms architecture",
             author: "Robert C. Martin",
@@ -44,13 +62,14 @@ describe('Creating a new blog', () => {
         await api
             .post('/api/blogs')
             .send(newBlog)
+            .auth(token, { type: 'bearer'})
             .expect(201)
             .expect('Content-Type', /application\/json/)
     
-        const newBlogsList = await api.get('/api/blogs')
-        expect(newBlogsList.body).toHaveLength(helper.initialBlogs.length + 1)
+        const newBlogsList = await helper.blogsInDb()
+        expect(newBlogsList).toHaveLength(helper.initialBlogs.length + 1)
     
-        const titles = newBlogsList.body.map(blog => blog.title) 
+        const titles = newBlogsList.map(blog => blog.title) 
         expect(titles).toContain(newBlog.title) 
     })
     
@@ -64,11 +83,12 @@ describe('Creating a new blog', () => {
         await api
             .post('/api/blogs')
             .send(blogWithNoLikes)
+            .auth(token, { type: 'bearer'})
             .expect(201)
             .expect('Content-Type', /application\/json/)
     
-        const result = await api.get('/api/blogs')
-        const theOneIWant = result.body.find(blog => blog.url === blogWithNoLikes.url)
+        const blogsInDb = await helper.blogsInDb()
+        const theOneIWant = blogsInDb.find(blog => blog.url === blogWithNoLikes.url)
         expect(theOneIWant.likes).toBeDefined()
         expect(theOneIWant.likes).toBe(0)
     })
@@ -82,10 +102,11 @@ describe('Creating a new blog', () => {
         await api
             .post('/api/blogs')
             .send(blogWithNoTitle)
+            .auth(token, { type: 'bearer'})
             .expect(400)
     
-        const result = await api.get('/api/blogs')
-        expect(result.body).toHaveLength(helper.initialBlogs.length)
+        const blogsInDb = await helper.blogsInDb()
+        expect(blogsInDb).toHaveLength(helper.initialBlogs.length)
     })
     
     test('fails with status 400 if url is missing', async () => {
@@ -97,26 +118,54 @@ describe('Creating a new blog', () => {
         await api
             .post('/api/blogs')
             .send(blogWithNoTitle)
+            .auth(token, { type: 'bearer'})
             .expect(400)
     
-        const result = await api.get('/api/blogs')
-        expect(result.body).toHaveLength(helper.initialBlogs.length)
+        const blogsInDb = await helper.blogsInDb()
+        expect(blogsInDb).toHaveLength(helper.initialBlogs.length)
     })
+
+    test('fails with status 403 if no token', async () => {
+        const newBlog = {
+            title: "TDD harms architecture",
+            author: "Robert C. Martin",
+            url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
+            likes: 4,
+        }
+        
+        await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(401)
+    })
+
+    
 })
 
 describe('Deleting a blog', () => {
-    test('can delete a blog with a valid id', async () => {
-        const response = await api.get('/api/blogs')
-        const noteToDelete = response.body[0].id
+    test('fails with 401 if no token', async () => {
+        const blogToDelete = await helper.initialBlogs[0]
 
         await api
-            .delete(`/api/blogs/${noteToDelete}`)
-            .send(noteToDelete)
-            .expect(204)
+            .delete(`/api/blogs/${blogToDelete}`)
+            .send(blogToDelete)
+            .expect(401)
     })
+
+    
 })
 
 describe('Updating a blog post', () => {
+    let token = null
+
+    beforeAll(async () => {
+        const body =  { username: "rootUser", password: "test12345" }
+
+        const response = await api.post('/api/login').send(body)
+        
+        token = response.body.token
+    })
+
     test('succeeds with a valid id and data', async () => {
         const response = await api.get('/api/blogs')
         const blogToUpdate = response.body[0]
@@ -132,6 +181,29 @@ describe('Updating a blog post', () => {
 
         expect(result.body.likes).toBe(52)
         
+    })
+
+    test('succeeds if token provided and user owns blog', async () => {
+        const blogToDelete = {
+            title: "blog to be deleted",
+            author: "Some Guy",
+            url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
+            likes: 4,
+        }
+      
+        const response = await api.post('/api/blogs')
+            .send(blogToDelete)
+            .auth(token, { type: 'bearer'})
+            .expect(201)
+
+        const blogAdded = await Blog.findById(response.body.id)
+
+        await api
+            .delete(`/api/blogs/${blogAdded.id}`)
+            .send(blogToDelete)
+            .auth(token, { type: 'bearer'})
+            .expect(response => console.log(response.body))
+            .expect(204)  
     })
 })
 

@@ -71,6 +71,9 @@ describe('viewing a specific note', () => {
 
 describe('addition of a new note', () => {
   test('succeeds with valid data', async () => {
+    // Need a user
+    // User needs a jwt token
+
     const newNote = {
       content: 'async/await simplifies making async calls',
       important: true
@@ -79,6 +82,7 @@ describe('addition of a new note', () => {
     await api
       .post('/api/notes')
       .send(newNote)
+      // .set({ Authorization: token })
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
@@ -94,6 +98,9 @@ describe('addition of a new note', () => {
   })
 
   test('fails with status code 400 if data invalid', async () => {
+    // Need a user
+    // Need jwt token
+
     const newNote = {
       important: true
     }
@@ -101,12 +108,16 @@ describe('addition of a new note', () => {
     await api
       .post('/api/notes')
       .send(newNote)
+      // .set({ Authorization: token })
       .expect(400)
 
     const notesAtEnd = await helper.notesInDb()
 
     expect(notesAtEnd).toHaveLength(helper.initialNotes.length)
   })
+
+  // Needs test for missing token
+  // Needs test for expired token
 })
 
 
