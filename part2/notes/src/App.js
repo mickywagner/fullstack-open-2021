@@ -63,6 +63,7 @@ function App() {
         username, password
       })
 
+      noteService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
@@ -134,7 +135,6 @@ function App() {
         </div>
       }
       
-
       <div className="noteDisplay">
         <button className="importantBtn" onClick={() => setShowAll(!showAll)}>
           {showAll ? "Important" : "All"}
