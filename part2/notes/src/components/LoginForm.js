@@ -1,13 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 
-const LoginForm = ({
-  handleSubmit,
-  handleUsernameChange,
-  handlePasswordChange,
-  username,
-  password,
-}) => {
-    
+const LoginForm = ({ handleLogin }) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    handleLogin({
+      username,
+      password,
+    });
+    setUsername("");
+    setPassword("");
+  };
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -19,7 +24,7 @@ const LoginForm = ({
               type="text"
               value={username}
               name="username"
-              onChange={handleUsernameChange}
+              onChange={({ target }) => setUsername(target.value)}
             />
           </label>
         </div>
@@ -31,7 +36,7 @@ const LoginForm = ({
               type="password"
               value={password}
               name="password"
-              onChange={handlePasswordChange}
+              onChange={({ target }) => setPassword(target.value)}
             />
           </label>
         </div>
@@ -41,4 +46,4 @@ const LoginForm = ({
   );
 };
 
-export default LoginForm
+export default LoginForm;
