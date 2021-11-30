@@ -4,7 +4,7 @@ const User = require('../models/user')
 const logger = require('../utils/logger')
 
 userRouter.post('/', async (request, response) => {
-    const { username, password } = request.body
+    const { username, name, password } = request.body
 
     if (password.length < 3) {
         return response.status(400).json({
@@ -18,6 +18,7 @@ userRouter.post('/', async (request, response) => {
 
     const user = new User({
         username,
+        name,
         passwordHash,
     })
 
