@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Footer from "./components/Footer";
 import Note from "./components/Note";
 import Notification from "./components/Notification";
@@ -13,6 +13,8 @@ function App() {
   const [showAll, setShowAll] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
   const [user, setUser] = useState(null);
+
+  const noteFormRef = useRef();
 
   useEffect(() => {
     noteService.getAll().then((initialNotes) => {
@@ -30,6 +32,8 @@ function App() {
   }, []);
 
   const addNewNote = (noteObject) => {
+    noteFormRef.current.toggleVisibility();
+
     noteService.create(noteObject).then((returnedNote) => {
       setNotes(notes.concat(returnedNote));
     });
@@ -71,6 +75,11 @@ function App() {
     }
   };
 
+  const removeNote = async (id) => {
+    await noteService.remove(id)
+    setNotes(notes.filter(note => note.id !== id))
+  }
+
   let notesToShow = showAll ? notes : notes.filter((note) => note.important);
 
   return (
@@ -86,7 +95,7 @@ function App() {
       ) : (
         <div>
           <p>{user.name} logged-in</p>
-          <Togglable buttonLabel="new note">
+          <Togglable buttonLabel="new note" ref={noteFormRef}>
             <NoteForm createNote={addNewNote} />
           </Togglable>
         </div>
@@ -102,6 +111,7 @@ function App() {
               key={note.id}
               note={note}
               toggleImportance={() => toggleImportance(note.id)}
+              removeNote={removeNote}
             />
           ))}
         </ul>
