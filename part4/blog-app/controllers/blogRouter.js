@@ -7,7 +7,7 @@ const { userExtractor } = require('../utils/middleware')
 blogRouter.get('/', async (request, response) => {
     const blogs = await Blog
         .find({})
-        .populate('user', { username: 1 })
+        .populate('user', { username: 1, name: 1})
     
     response.status(200).json(blogs)
 })
