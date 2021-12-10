@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const Blog = ({blog, updateBlog}) => {
+const Blog = ({blog, updateBlog, handleRemove, user}) => {
   const [ isExpanded, setIsExpanded ] = useState(false)
 
   const showWhenExpanded = { display: isExpanded ? "block" : "none"}
@@ -20,6 +20,12 @@ const Blog = ({blog, updateBlog}) => {
     updateBlog(blog.id, modifiedBlog)
   }
 
+  const removeClick = () => {
+    const confirmation = window.confirm(`Remove blog ${blog.title} by ${blog.author}`);
+    if (confirmation) {
+      handleRemove(blog.id)
+    }
+  }
   return(
     <div style={blogStyle}>
       {blog.title} {blog.author} <button onClick={() => setIsExpanded(!isExpanded)}>{btnTxt}</button>
@@ -27,6 +33,11 @@ const Blog = ({blog, updateBlog}) => {
         {blog.url}<br/>
         likes {blog.likes} <button onClick={addLike}>like</button><br />
         {blog.user.name}<br />
+        {
+          blog.user.username === user.username && <button onClick={removeClick}>remove</button>
+
+        }
+        
       </div>
     </div> 
   )
