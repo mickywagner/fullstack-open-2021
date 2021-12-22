@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react'
 
-const Notification = ({message}) => {
+const Notification = ({ message }) => {
   return (
-    <div className="error" style={message == null ? {display: 'none'} : {display: 'block'}}>
+    <div className="error" style={message === null ? { display: 'none' } : { display: 'block' }}>
       {message}
     </div>
-  );
-};
+  )
+}
 
-export default Notification;
+export default Notification
